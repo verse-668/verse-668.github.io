@@ -1,0 +1,12 @@
+title: "TKS"
+baseurl: ""
+theme: minima
+permalink: /:strand/:chapter/:verse/
+collections:
+  strands:
+    output: true
+  passages:
+    output: true
+  verses:
+    output: true
+repository: "example/dummy"

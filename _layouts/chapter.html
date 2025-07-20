@@ -1,0 +1,75 @@
+---
+layout: default
+---
+
+{% comment %}
+Strand list in natural order
+0-AWM 1-TRL 2-LIM 3-RIT 4-RLI 5-TYX 6-WXY
+weave_matrix rows encoded as pipe-separated CSV strings
+{% endcomment %}
+
+{% assign NAT = "AWM,TRL,LIM,RIT,RLI,TYX,WXY" | split: "," %}
+{% assign MATRIX = "2,5,4,0,6,3,1|0,2,5,4,3,1,6|5,1,0,6,4,2,3|6,3,1,5,0,4,2|4,6,3,2,1,5,0|1,0,2,3,5,6,4|3,4,6,1,2,0,5" | split: "|" %}
+
+{% assign chap_n = page.chapter | plus: 0 %}
+{% assign zero_idx = chap_n | minus: 1 %}        
+{% assign row_csv = MATRIX[zero_idx] %}
+{% assign row = row_csv | split: "," %}
+
+<nav class="text-sm mb-6 flex justify-between">
+  <a href="{{ '/' | relative_url }}"
+     class="text-indigo-600 hover:underline">&larr; home</a>
+
+  {%- assign prev_ch = chap_n | minus: 1 -%}
+  {%- assign next_ch = chap_n | plus: 1 -%}
+
+  <div class="flex gap-4">
+    {%- if prev_ch > 0 -%}
+      <a href="{{ '/chapter/' | append: prev_ch | append: '/' | relative_url }}"
+         class="text-indigo-600 hover:underline">&larr; Chapter&nbsp;{{ prev_ch }}</a>
+    {%- endif -%}
+
+    {%- if next_ch < 8 -%}
+      <a href="{{ '/chapter/' | append: next_ch | append: '/' | relative_url }}"
+         class="text-indigo-600 hover:underline">Chapter&nbsp;{{ next_ch }} &rarr;</a>
+    {%- endif -%}
+  </div>
+</nav>
+
+<h1 class="text-3xl font-bold mb-8">Chapter {{ chap_n }}</h1>
+
+{% for idx_str in row %}
+  {% assign idx_trim = idx_str | strip %}
+  {% assign idx_num  = idx_trim | plus: 0 %}
+  {% assign strand   = NAT[idx_num] %}
+
+  {% assign passage = site.passages
+                      | where:"strand",  strand
+                      | where:"passage", chap_n
+                      | first %}
+
+  {% if passage %}
+    <h2 class="text-xl font-semibold mt-10 mb-4">
+      <a href="{{ passage.url }}" class="text-indigo-700 hover:underline">
+        {{ strand }} {{ chap_n }}
+      </a>
+    </h2>
+
+    {% assign verses = site.verses
+                       | where:"strand",  strand
+                       | where:"passage", chap_n
+                       | sort:"verse" %}
+    {% assign parts = verses | group_by:"part" %}
+
+    {% for grp in parts %}
+      <p class="leading-relaxed mb-6">
+        {% for v in grp.items %}
+          {{ v.content | markdownify | strip_html | strip }}{% unless forloop.last %} {% endunless %}
+        {% endfor %}
+      </p>
+      {% unless forloop.last %}
+        <p class="text-center text-xl my-4 select-none">~ ~ ~</p>
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}

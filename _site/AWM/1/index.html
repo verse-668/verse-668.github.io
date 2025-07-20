@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AWM 1 | TKS</title>
+
+  <!-- Tailwind via the official CDN compiler -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-50 text-slate-800">
+  <main class="max-w-3xl mx-auto p-6">
+    <style>
+.hide-numbers .vnum              { display:none; }
+.line-breaks  .verse              { display:block; margin-bottom:0.5rem; }
+
+.blockquote-on .quote-block       { display:block; margin:0.75rem 0; font-style:italic; }
+</style>
+
+<nav class="text-sm mb-4 flex justify-between">
+  <a href="/AWM/"
+     class="text-indigo-600 hover:underline">&larr; back to AWM</a>
+
+  
+  
+  
+  
+  
+  <div class="flex gap-4">
+    
+    <a href="/AWM/2/" class="text-indigo-600 hover:underline">AWM 2 &rarr;</a>
+  </div>
+</nav>
+
+<h1 class="text-2xl font-bold mb-6">AWM 1</h1>
+
+<div class="mb-6 space-x-6">
+  <label><input type="checkbox" id="cbNum"> verse&nbsp;numbers</label>
+  <label><input type="checkbox" id="cbBreak"> line-by-line</label>
+  <label><input type="checkbox" id="cbQuote" checked> block&nbsp;quotes</label>
+</div>
+
+
+<div id="passage" class="line-breaks blockquote-on">
+  
+  
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/1/"><sup>1</sup></a></span>The human is a physical being.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/2/"><sup>2</sup></a></span>Therefore the human is at the mercy of the physical laws of the universe.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/3/"><sup>3</sup></a></span>And the human is a part of the universe, small in its size, perhaps, but remarkable in its complexity.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/4/"><sup>4</sup></a></span>So although the human is made of physical parts, it is alive.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/5/"><sup>5</sup></a></span>Therefore, the human is able to maintain its remarkable state, despite the decay of time.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/6/"><sup>6</sup></a></span>But not only is the human alive, it is aware, with memories and emotions, dreams and fears.
+    </span>
+
+  <div class="text-center text-xl my-4 select-none">~ ~ ~</div>
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/7/"><sup>7</sup></a></span>And the human knows that it is alive, that it is aware, and that it is in the universe.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/8/"><sup>8</sup></a></span>But this truth can only ever be personal, no matter how universal it seems, because the human will always be constrained within its finite being.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/9/"><sup>9</sup></a></span>Therefore, this experience can only ever be an approximation of the true nature of the universe, because although the human is remarkable, it is finite, a single piece of structure in the void.
+    </span>
+
+  <div class="text-center text-xl my-4 select-none">~ ~ ~</div>
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/10/"><sup>10</sup></a></span>To be alive is not a choice, it is a fact, purely and undeniably true, given by the universe and understood by the human.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/11/"><sup>11</sup></a></span>But there can never be true certainty beyond the fact that the current moment exists, because the human is a physical being, a part of the physical universe.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/12/"><sup>12</sup></a></span>And this moment can be chaotic, full of vibrant colors and vivid thoughts, but it is not meaningless, for you have something far more powerful than truth.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/13/"><sup>13</sup></a></span>You have faith.
+    </span>
+
+  
+    
+    
+    
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="/AWM/1/14/"><sup>14</sup></a></span>Faith that tomorrow will come, and you will be here tomorrow, just as you are here today.
+    </span>
+
+  
+</div>
+
+<script>
+const g = id => document.getElementById(id);
+const wrap = g('passage');
+
+function update() {
+  wrap.classList.toggle('hide-numbers', !g('cbNum').checked);
+  wrap.classList.toggle('line-breaks',  g('cbBreak').checked);
+  wrap.classList.toggle('blockquote-on', g('cbQuote').checked);
+}
+['cbNum','cbBreak','cbQuote'].forEach(id => g(id).addEventListener('change', update));
+update();
+</script>
+  </main>
+
+  <!-- built 2025-07-20 16:33:35 -->
+</body>
+</html>

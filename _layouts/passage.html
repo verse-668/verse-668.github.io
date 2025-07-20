@@ -1,0 +1,96 @@
+---
+layout: default
+---
+
+<style>
+.hide-numbers .vnum              { display:none; }
+.line-breaks  .verse              { display:block; margin-bottom:0.5rem; }
+
+.blockquote-on .quote-block       { display:block; margin:0.75rem 0; font-style:italic; }
+</style>
+
+<nav class="text-sm mb-4 flex justify-between">
+  <a href="{{ '/' | append: page.strand | append: '/' | relative_url }}"
+     class="text-indigo-600 hover:underline">&larr; back to {{ page.strand }}</a>
+
+  {% assign prev_num = page.passage | minus: 1 %}
+  {% assign next_num = page.passage | plus: 1 %}
+  {% assign sibs = site.passages | where:"strand",page.strand %}
+  {% assign prev = sibs | where:"passage",prev_num | first %}
+  {% assign next = sibs | where:"passage",next_num | first %}
+  <div class="flex gap-4">
+    {% if prev %}<a href="{{ prev.url }}" class="text-indigo-600 hover:underline">&larr; {{ page.strand }} {{ prev.passage }}</a>{% endif %}
+    {% if next %}<a href="{{ next.url }}" class="text-indigo-600 hover:underline">{{ page.strand }} {{ next.passage }} &rarr;</a>{% endif %}
+  </div>
+</nav>
+
+<h1 class="text-2xl font-bold mb-6">{{ page.strand }} {{ page.passage }}</h1>
+
+<div class="mb-6 space-x-6">
+  <label><input type="checkbox" id="cbNum"> verse&nbsp;numbers</label>
+  <label><input type="checkbox" id="cbBreak"> line-by-line</label>
+  <label><input type="checkbox" id="cbQuote" checked> block&nbsp;quotes</label>
+</div>
+{% assign verses = site.verses
+                   | where:"strand",  page.strand
+                   | where:"passage", page.passage
+                   | sort:"verse" %}
+
+<div id="passage" class="line-breaks blockquote-on">
+  {% assign prev_part = -1 %}
+  {% assign in_quote  = false %}
+
+  {% for v in verses %}
+    {%- comment -%} part‐divider as before {%- endcomment -%}
+    {%- if v.part != prev_part -%}
+      {%- unless forloop.first -%}
+        <div class="text-center text-xl my-4 select-none">~ ~ ~</div>
+      {%- endunless -%}
+      {%- assign prev_part = v.part -%}
+    {%- endif -%}
+
+    {% assign txt       = v.content | markdownify | strip_html | strip %}
+    {% assign firstchar = txt | slice: 0, 1 %}
+    {% assign lastchar  = txt | slice: -1, 1 %}
+
+    {%- assign is_open  = false -%}
+    {%- assign is_close = false -%}
+
+    {% if firstchar == '"' or firstchar == '“' %}
+      {% assign is_open = true %}
+    {% endif %}
+    {% if lastchar == '"' or lastchar == '”' %}
+      {% assign is_close = true %}
+    {% endif %}
+
+    {%- comment -%} open wrapper if this verse starts a quote and we’re not already inside one {%- endcomment -%}
+    {% if is_open and in_quote == false %}
+      <span class="quote-block">
+      {% assign in_quote = true %}
+    {% endif %}
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="{{ v.url }}"><sup>{{ v.verse }}</sup></a></span>{{ txt }}
+    </span>
+
+    {%- comment -%} close wrapper if this verse ends a quote {%- endcomment -%}
+    {% if is_close and in_quote == true %}
+      </span>
+      {% assign in_quote = false %}
+    {% endif %}
+
+  {% endfor %}
+</div>
+
+<script>
+const g = id => document.getElementById(id);
+const wrap = g('passage');
+
+function update() {
+  wrap.classList.toggle('hide-numbers', !g('cbNum').checked);
+  wrap.classList.toggle('line-breaks',  g('cbBreak').checked);
+  wrap.classList.toggle('blockquote-on', g('cbQuote').checked);
+}
+['cbNum','cbBreak','cbQuote'].forEach(id => g(id).addEventListener('change', update));
+update();
+</script>

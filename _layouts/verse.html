@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+{% assign prev_n = page.verse | minus: 1 %}
+{% assign next_n = page.verse | plus: 1 %}
+
+{% assign siblings = site.verses
+                     | where:"strand",  page.strand
+                     | where:"passage", page.passage %}
+
+{% assign prev = siblings | where:"verse", prev_n | first %}
+{% assign next = siblings | where:"verse", next_n | first %}
+
+<nav class="flex justify-between text-sm mb-6">
+  <a href="{{ '/' | append: page.strand | append: '/' | append: page.passage | append: '/' | relative_url }}"
+     class="text-indigo-600 hover:underline">&larr; back to {{ page.strand }} {{ page.passage }}</a>
+
+  <div class="flex gap-4">
+    {% if prev %}
+      <a href="{{ prev.url }}" class="text-indigo-600 hover:underline">&larr; prev</a>
+    {% endif %}
+    {% if next %}
+      <a href="{{ next.url }}" class="text-indigo-600 hover:underline">next &rarr;</a>
+    {% endif %}
+  </div>
+</nav>
+
+<h1 class="text-2xl font-bold text-center mb-4">{{ page.strand }} {{ page.passage }}:{{ page.verse }}</h1>
+
+<p class="leading-relaxed max-w-3xl mx-auto">
+  {{ content | markdownify | strip_html | strip }}
+</p>

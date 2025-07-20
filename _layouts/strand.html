@@ -1,0 +1,39 @@
+---
+layout: default
+---
+
+<nav class="text-sm mb-6">
+  <a href="{{ '/' | relative_url }}" class="text-indigo-600 hover:underline">&larr; all strands</a>
+</nav>
+
+<h1 class="text-3xl font-bold mb-8">{{ page.strand }}</h1>
+
+{% assign passages = site.passages
+                     | where:"strand", page.strand
+                     | sort:"passage" %}
+
+{% for p in passages %}
+  <h2 class="text-xl font-semibold mt-10 mb-4">
+    <a href="{{ p.url }}" class="text-indigo-700 hover:underline">
+      {{ p.strand }} {{ p.passage }}
+    </a>
+  </h2>
+
+  {% assign verses = site.verses
+                     | where:"strand",  p.strand
+                     | where:"passage", p.passage
+                     | sort:"verse" %}
+
+  {% assign grouped = verses | group_by: "part" %}
+
+  {% for grp in grouped %}
+    <p class="leading-relaxed mb-6">
+      {% for v in grp.items %}
+        {{ v.content | markdownify | strip_html | strip }}{% unless forloop.last %} {% endunless %}
+      {% endfor %}
+    </p>
+    {% unless forloop.last %}
+      <p class="text-center text-xl my-4 select-none">~ ~ ~</p>
+    {% endunless %}
+  {% endfor %}
+{% endfor %}

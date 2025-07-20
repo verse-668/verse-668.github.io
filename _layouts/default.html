@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ page.title }} | {{ site.title }}</title>
+
+  <!-- Tailwind via the official CDN compiler -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-50 text-slate-800">
+  <main class="max-w-3xl mx-auto p-6">
+    {{ content }}
+  </main>
+
+  <!-- built {{ "now" | date: "%Y-%m-%d %H:%M:%S" }} -->
+</body>
+</html>
