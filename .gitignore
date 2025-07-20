@@ -1,0 +1,30 @@
+#------------------------
+# Jekyll / Ruby artefacts
+#------------------------
+_site/
+.sass-cache/
+.jekyll-cache/
+.bundle/
+vendor/bundle/
+
+#------------------------
+# Node / Tailwind (if you ever add a local build)
+#------------------------
+node_modules/
+package-lock.json
+yarn.lock
+
+#------------------------
+# Logs & temp
+#------------------------
+*.log
+tmp/
+.DS_Store
+
+#------------------------
+# OS / editor files
+#------------------------
+*.swp
+*~
+.idea/
+.vscode/
