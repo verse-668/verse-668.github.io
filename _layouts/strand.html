@@ -2,16 +2,29 @@
 layout: default
 ---
 
+<style>
+.hide-numbers .vnum              { display:none; }
+.line-breaks  .verse              { display:block; margin-bottom:0.5rem; }
+.blockquote-on .quote-block       { display:block; margin:0.75rem 0; font-style:italic; }
+</style>
+
 <nav class="text-sm mb-6">
   <a href="{{ '/' | relative_url }}" class="text-indigo-600 hover:underline">&larr; all strands</a>
 </nav>
 
-<h1 class="text-3xl font-bold mb-8">{{ page.strand }}</h1>
+<h1 class="text-3xl font-bold mb-4">{{ page.strand }}</h1>
+
+<div class="mb-6 space-x-6">
+  <label><input type="checkbox" id="cbNum"> verse&nbsp;numbers</label>
+  <label><input type="checkbox" id="cbBreak"> line-by-line</label>
+  <label><input type="checkbox" id="cbQuote" checked> block&nbsp;quotes</label>
+</div>
 
 {% assign passages = site.passages
                      | where:"strand", page.strand
                      | sort:"passage" %}
 
+<div id="passage" class="line-breaks blockquote-on">
 {% for p in passages %}
   <h2 class="text-xl font-semibold mt-10 mb-4">
     <a href="{{ p.url }}" class="text-indigo-700 hover:underline">
@@ -24,16 +37,52 @@ layout: default
                      | where:"passage", p.passage
                      | sort:"verse" %}
 
-  {% assign grouped = verses | group_by: "part" %}
+  {% assign prev_part = -1 %}
+  {% assign in_quote  = false %}
 
-  {% for grp in grouped %}
-    <p class="leading-relaxed mb-6">
-      {% for v in grp.items %}
-        {{ v.content | markdownify | strip_html | strip }}{% unless forloop.last %} {% endunless %}
-      {% endfor %}
-    </p>
-    {% unless forloop.last %}
-      <p class="text-center text-xl my-4 select-none">~ ~ ~</p>
-    {% endunless %}
+  {% for v in verses %}
+    {% if v.part != prev_part %}
+      {% unless forloop.first %}
+        <div class="text-center text-xl my-4 select-none">~ ~ ~</div>
+      {% endunless %}
+      {% assign prev_part = v.part %}
+    {% endif %}
+
+    {% assign txt       = v.content | markdownify | strip_html | strip %}
+    {% assign firstchar = txt | slice: 0, 1 %}
+    {% assign lastchar  = txt | slice: -1, 1 %}
+
+    {% assign is_open  = false %}
+    {% assign is_close = false %}
+    {% if firstchar == '"' or firstchar == '“' %}{% assign is_open  = true %}{% endif %}
+    {% if lastchar  == '"' or lastchar  == '”' %}{% assign is_close = true %}{% endif %}
+
+    {% if is_open and in_quote == false %}
+      <span class="quote-block">
+      {% assign in_quote = true %}
+    {% endif %}
+
+    <span class="verse inline">
+      <span class="vnum mr-1"><a href="{{ v.url }}"><sup>{{ v.verse }}</sup></a></span>{{ txt }}
+    </span>
+
+    {% if is_close and in_quote == true %}
+      </span>
+      {% assign in_quote = false %}
+    {% endif %}
   {% endfor %}
 {% endfor %}
+</div>
+
+<script>
+const g = id => document.getElementById(id);
+const wrap = g('passage');
+
+function update() {
+  wrap.classList.toggle('hide-numbers', !g('cbNum').checked);
+  wrap.classList.toggle('line-breaks',  g('cbBreak').checked);
+  wrap.classList.toggle('blockquote-on', g('cbQuote').checked);
+}
+['cbNum','cbBreak','cbQuote'].forEach(id => g(id).addEventListener('change', update));
+update();
+</script>
